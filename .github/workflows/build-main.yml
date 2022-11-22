@@ -1,0 +1,22 @@
+name: Build on Ubuntu
+on:
+  push:
+    branches:
+      - develop-ubuntu
+jobs:
+  Build-Node-WebRTC-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: NodeJS Dependencies Install
+        run: |
+          SKIP_DOWNLOAD=true npm install
+      - name: Build Release
+        run: |
+          ./node_modules/.bin/ncmake rebuild -- -DGN_GEN_ARGS='proprietary_codecs=true ffmpeg_branding="Chrome"'
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Node WebRTC Ubuntu
+          path: build/Release/wrtc.node
